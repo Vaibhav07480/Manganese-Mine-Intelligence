@@ -34,9 +34,20 @@ export const BASE_STYLE: StyleSpecification = {
       tileSize: 256,
       maxzoom: 19,
     },
+    sentinel2: {
+      type: "raster",
+      tiles: [
+        "https://tiles.maps.eox.at/wmts/1.0.0/s2cloudless-2024_3857/default/GoogleMapsCompatible/{z}/{y}/{x}.jpg",
+      ],
+      tileSize: 256,
+      maxzoom: 16,
+      attribution:
+        "© Sentinel-2 cloudless by EOX IT Services GmbH (Contains modified Copernicus Sentinel data)",
+    },
   },
   layers: [
     { id: "imagery", type: "raster", source: "imagery" },
+    { id: "sentinel2", type: "raster", source: "sentinel2", layout: { visibility: "none" } },
     { id: "topo", type: "raster", source: "topo", layout: { visibility: "none" } },
   ],
 };

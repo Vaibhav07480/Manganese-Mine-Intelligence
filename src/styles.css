@@ -151,7 +151,7 @@ input {
   top: 16px;
   right: 16px;
   z-index: 4;
-  width: 188px;
+  width: 204px;
   padding: 12px 12px 10px;
   background: var(--glass);
   box-shadow: var(--shadow);
@@ -160,24 +160,33 @@ input {
 
 .basemap-switch {
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-columns: 1fr 1fr;
+  gap: 4px;
   border-bottom: 1px solid var(--khaki);
+  padding-bottom: 8px;
   margin-bottom: 8px;
 }
 
 .basemap-switch button {
   border: 0;
-  background: none;
-  padding: 6px 0 8px;
-  font-size: 11px;
-  color: #6d645a;
+  background: rgba(58, 31, 22, 0.05);
+  border-radius: 4px;
+  padding: 5px 6px;
+  font-size: 10.5px;
+  color: #5c534b;
   cursor: pointer;
+  text-align: center;
+  transition: background 140ms ease, color 140ms ease;
+}
+
+.basemap-switch button:hover {
+  background: rgba(58, 31, 22, 0.1);
 }
 
 .basemap-switch button.is-on {
-  color: var(--oxide);
+  color: var(--paper);
+  background: var(--oxide);
   font-weight: 600;
-  box-shadow: inset 0 -2px 0 var(--oxide);
 }
 
 .layer-list {
@@ -466,6 +475,157 @@ input {
   padding-left: 16px;
   font-family: var(--mono);
   font-size: 11px;
+}
+
+/* Sentinel-2 Telemetry Card */
+.sentinel-card {
+  margin: 14px 0 16px;
+  padding: 12px 14px;
+  background: rgba(58, 31, 22, 0.04);
+  border: 1px solid rgba(196, 183, 162, 0.6);
+  border-radius: 6px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.sentinel-header {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.sentinel-title-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.sentinel-icon {
+  font-size: 14px;
+}
+
+.sentinel-title-row strong {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--oxide);
+  flex: 1;
+}
+
+.sentinel-badge {
+  font-family: var(--mono);
+  font-size: 9px;
+  font-weight: 500;
+  padding: 2px 6px;
+  border-radius: 3px;
+  background: rgba(47, 107, 79, 0.14);
+  color: var(--canopy);
+  border: 1px solid rgba(47, 107, 79, 0.28);
+  letter-spacing: 0.04em;
+}
+
+.sentinel-meta {
+  font-family: var(--mono);
+  font-size: 10px;
+  color: #7a7064;
+  display: flex;
+  gap: 6px;
+}
+
+.sentinel-bands {
+  padding-top: 2px;
+}
+
+.sentinel-bars {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 6px;
+  align-items: end;
+  height: 68px;
+}
+
+.sentinel-bar-col {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 100%;
+  justify-content: flex-end;
+  gap: 3px;
+  cursor: help;
+}
+
+.sentinel-bar-val {
+  font-family: var(--mono);
+  font-size: 8.5px;
+  color: #8c8173;
+}
+
+.sentinel-bar-track {
+  width: 100%;
+  height: 40px;
+  background: rgba(196, 183, 162, 0.25);
+  border-radius: 2px;
+  display: flex;
+  align-items: flex-end;
+  overflow: hidden;
+}
+
+.sentinel-bar-fill {
+  width: 100%;
+  border-radius: 2px;
+  transition: height 280ms ease;
+}
+
+.sentinel-bar-fill.band-b2 {
+  background: #3B82F6;
+}
+.sentinel-bar-fill.band-b3 {
+  background: #10B981;
+}
+.sentinel-bar-fill.band-b4 {
+  background: #EF4444;
+}
+.sentinel-bar-fill.band-b8 {
+  background: #059669;
+}
+.sentinel-bar-fill.band-b11 {
+  background: #D97706;
+}
+.sentinel-bar-fill.band-b12 {
+  background: #9333EA;
+}
+
+.sentinel-bar-label {
+  font-family: var(--mono);
+  font-size: 9px;
+  font-weight: 500;
+  color: var(--oxide);
+}
+
+.sentinel-indices {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  padding-top: 6px;
+  border-top: 1px dashed rgba(196, 183, 162, 0.55);
+}
+
+.sentinel-idx {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.idx-label {
+  font-size: 10px;
+  color: #7a7064;
+}
+
+.idx-val {
+  font-family: var(--mono);
+  font-size: 11.5px;
+  font-weight: 500;
+  color: var(--oxide);
 }
 
 .hover-preview {

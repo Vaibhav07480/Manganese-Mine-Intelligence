@@ -2,12 +2,14 @@ import type { BasemapId, OverlayId } from "../data/types";
 
 const BASEMAPS: { id: BasemapId; label: string }[] = [
   { id: "satellite", label: "Satellite" },
+  { id: "sentinel2", label: "Sentinel-2" },
   { id: "hybrid", label: "Hybrid" },
   { id: "terrain", label: "Terrain" },
 ];
 
 const LAYERS: { id: OverlayId; label: string }[] = [
   { id: "reserves", label: "Reserves" },
+  { id: "sentinel_swir", label: "S2 Mineral (SWIR)" },
   { id: "drills", label: "Drill holes" },
   { id: "ndvi", label: "NDVI" },
   { id: "rainfall", label: "Rainfall" },
@@ -18,6 +20,7 @@ const LAYERS: { id: OverlayId; label: string }[] = [
 
 const RAMPS: Partial<Record<OverlayId, { low: string; high: string; min: string; max: string }>> = {
   reserves: { low: "#C4B7A2", high: "#3A1F16", min: "Low Mn", max: "High Mn" },
+  sentinel_swir: { low: "#2D1B4E", high: "#FFE599", min: "Background", max: "Mn Gossan" },
   ndvi: { low: "#6B4A2B", high: "#2F6B4F", min: "Bare", max: "Canopy" },
   rainfall: { low: "#E4D7C4", high: "#1E3F4A", min: "Dry", max: "Wet" },
   moisture: { low: "#D9C7A8", high: "#3F6F5C", min: "Arid", max: "Saturated" },

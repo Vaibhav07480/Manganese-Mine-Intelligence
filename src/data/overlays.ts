@@ -29,6 +29,7 @@ function buildOverlayCells(): OverlayCell[] {
         const moisture: number[] = [];
         const lst: number[] = [];
         const reserve: number[] = [];
+        const sentinelSwir: number[] = [];
         for (let m = 0; m < 12; m += 1) {
           const jitter = hash01(`${site.id}:${i}:${j}:${m}`) - 0.5;
           ndvi.push(clamp01(series[m].ndvi * (1.15 - pit * 0.55) + jitter * 0.04));
@@ -37,6 +38,16 @@ function buildOverlayCells(): OverlayCell[] {
           lst.push(series[m].lstC + pit * 3.4 + jitter * 1.2);
           const grade = site.predictedReservesMt / Math.max(site.leaseKm2, 0.4);
           reserve.push(clamp01(grade / 9 + pit * 0.55 + site.lateriticSignal * 0.2 + jitter * 0.08));
+
+          // Sentinel-2 SWIR / Laterite Alteration Index (B11 1610nm & B12 2190nm response)
+          const dryFactor = Math.max(0.25, 1 - (series[m].rainfallMm / 360));
+          const swirAnomaly = clamp01(
+            site.lateriticSignal * 0.65 +
+              pit * 0.45 * dryFactor +
+              (1 - series[m].soilMoisture) * 0.15 +
+              jitter * 0.08,
+          );
+          sentinelSwir.push(swirAnomaly);
         }
         cells.push({
           id,
@@ -47,6 +58,7 @@ function buildOverlayCells(): OverlayCell[] {
           moisture,
           lst,
           reserve,
+          sentinelSwir,
         });
         id += 1;
       }

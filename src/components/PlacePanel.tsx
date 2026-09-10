@@ -1,6 +1,7 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { WEIGHTS } from "../models/weights";
-import type { MonthPoint, Site, SiteInsight } from "../data/types";
+import { getSentinelTelemetry } from "../models/sentinel";
+import type { MonthPoint, SentinelTelemetry, Site, SiteInsight } from "../data/types";
 
 interface PlacePanelProps {
   site: Site;
@@ -12,6 +13,7 @@ interface PlacePanelProps {
 export function PlacePanel({ site, insight, monthIndex, onClose }: PlacePanelProps) {
   const [openScore, setOpenScore] = useState(false);
   const method = site.kind === "mine" ? (site.method === "UG" ? "Underground" : "Opencast") : "Greenfield prospect";
+  const sentinel = useMemo(() => getSentinelTelemetry(site, monthIndex), [site, monthIndex]);
 
   return (
     <aside className="place-panel" aria-label={site.name}>
@@ -51,6 +53,8 @@ export function PlacePanel({ site, insight, monthIndex, onClose }: PlacePanelPro
           {Math.round(insight.targetT).toLocaleString("en-IN")} t
         </p>
       )}
+
+      <SentinelCard sentinel={sentinel} />
 
       <ol className="place-actions">
         {insight.actions.map((step, index) => (
@@ -118,5 +122,61 @@ function Sparkline({ series, monthIndex }: { series: MonthPoint[]; monthIndex: n
         <circle cx={cx} cy={cy} r="3.5" fill="#D6452A" />
       </svg>
     </figure>
+  );
+}
+
+function SentinelCard({ sentinel }: { sentinel: SentinelTelemetry }) {
+  return (
+    <section className="sentinel-card" aria-label="Copernicus Sentinel-2 telemetry">
+      <div className="sentinel-header">
+        <div className="sentinel-title-row">
+          <span className="sentinel-icon">🛰</span>
+          <strong>Copernicus Sentinel-2</strong>
+          <span className="sentinel-badge">10m BOA</span>
+        </div>
+        <div className="sentinel-meta">
+          <span>Tile {sentinel.mgrsTile}</span>
+          <span>·</span>
+          <span>Orbit {sentinel.relativeOrbit}</span>
+          <span>·</span>
+          <span>Cloud {sentinel.cloudCoveragePct}%</span>
+        </div>
+      </div>
+
+      <div className="sentinel-bands">
+        <div className="sentinel-bars">
+          {sentinel.bands.map((b) => {
+            const h = Math.min(100, Math.max(8, Math.round(b.reflectance * 180)));
+            return (
+              <div
+                key={b.band}
+                className="sentinel-bar-col"
+                title={`${b.name} (${b.band} · ${b.wavelength}): ${(b.reflectance * 100).toFixed(1)}%`}
+              >
+                <span className="sentinel-bar-val">{(b.reflectance * 100).toFixed(0)}%</span>
+                <div className="sentinel-bar-track">
+                  <div
+                    className={`sentinel-bar-fill band-${b.band.toLowerCase()}`}
+                    style={{ height: `${h}%` }}
+                  />
+                </div>
+                <span className="sentinel-bar-label">{b.band}</span>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+
+      <div className="sentinel-indices">
+        <div className="sentinel-idx">
+          <span className="idx-label">Fe-Oxide (B4/B2)</span>
+          <span className="idx-val">{sentinel.ironOxideIndex.toFixed(2)}</span>
+        </div>
+        <div className="sentinel-idx">
+          <span className="idx-label">Laterite SWIR (B11/B12)</span>
+          <span className="idx-val">{sentinel.lateriteAlterationRatio.toFixed(2)}</span>
+        </div>
+      </div>
+    </section>
   );
 }

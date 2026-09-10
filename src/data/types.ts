@@ -9,13 +9,14 @@ export type StateName =
 export type OverlayId =
   | "reserves"
   | "drills"
+  | "sentinel_swir"
   | "ndvi"
   | "rainfall"
   | "moisture"
   | "lst"
   | "equipment";
 
-export type BasemapId = "satellite" | "hybrid" | "terrain";
+export type BasemapId = "satellite" | "sentinel2" | "hybrid" | "terrain";
 export type RiskLevel = "low" | "medium" | "high";
 
 export interface Site {
@@ -67,6 +68,7 @@ export interface OverlayCell {
   moisture: number[];
   lst: number[];
   reserve: number[];
+  sentinelSwir: number[];
 }
 
 export interface DrillHole {
@@ -114,4 +116,22 @@ export interface SiteInsight {
   drivers: Driver[];
   series: MonthPoint[];
   current: MonthPoint;
+}
+
+export interface SentinelBand {
+  band: string;
+  name: string;
+  wavelength: string;
+  reflectance: number; // 0.00 to 1.00
+}
+
+export interface SentinelTelemetry {
+  mgrsTile: string;
+  relativeOrbit: string;
+  sensor: string;
+  resolution: string;
+  cloudCoveragePct: number;
+  ironOxideIndex: number;
+  lateriteAlterationRatio: number;
+  bands: SentinelBand[];
 }

@@ -15,6 +15,7 @@ export function overlayCollection(monthIndex: number): FeatureCollection<Polygon
         moisture: cell.moisture[monthIndex],
         lst: Math.min(1, Math.max(0, (cell.lst[monthIndex] - 20) / 28)),
         reserve: cell.reserve[monthIndex],
+        sentinelSwir: cell.sentinelSwir[monthIndex],
       },
       geometry: { type: "Polygon", coordinates: [cell.polygon] },
     })),

@@ -156,6 +156,18 @@ export function MapCanvas({
         ]),
         layout: { visibility: "none" },
       });
+      map.addLayer({
+        id: "overlay-sentinel-swir",
+        type: "fill",
+        source: "overlays",
+        paint: overlayPaint("sentinelSwir", [
+          [0.15, "#2D1B4E"],
+          [0.4, "#A24822"],
+          [0.65, "#E69D45"],
+          [0.88, "#FFE599"],
+        ]),
+        layout: { visibility: "none" },
+      });
 
       map.addLayer({
         id: "leases-fill",
@@ -412,17 +424,22 @@ function setSource(map: MapLibreMap, id: string, data: object): void {
 }
 
 function applyBasemap(map: MapLibreMap, basemap: BasemapId): void {
-  const satellite = basemap !== "terrain";
-  const hybrid = basemap === "hybrid";
-  setVis(map, "imagery", satellite);
-  setVis(map, "topo", !satellite);
-  setVis(map, "places", hybrid);
-  setVis(map, "roads", hybrid);
+  const isSentinel = basemap === "sentinel2";
+  const isTopo = basemap === "terrain";
+  const isEsri = basemap === "satellite" || basemap === "hybrid";
+  const isHybrid = basemap === "hybrid";
+
+  setVis(map, "sentinel2", isSentinel);
+  setVis(map, "imagery", isEsri);
+  setVis(map, "topo", isTopo);
+  setVis(map, "places", isHybrid);
+  setVis(map, "roads", isHybrid);
 }
 
 const OVERLAY_LAYER: Record<OverlayId, string> = {
   reserves: "leases-fill",
   drills: "drills-layer",
+  sentinel_swir: "overlay-sentinel-swir",
   ndvi: "overlay-ndvi",
   rainfall: "overlay-rainfall",
   moisture: "overlay-moisture",
